@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LocalForms</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>LocalForms</h1>
+
+    <!-- Вкладки навігації -->
+    <nav>
+      <button onclick="UI.switchTab('surveyTab')" class="active">Survey</button>
+      <button onclick="UI.switchTab('voteTab')">Vote</button>
+      <button onclick="UI.switchTab('resultsTab')">Results</button>
+      <button onclick="UI.switchTab('themeTab')">Theme</button>
+    </nav>
+
+    <!-- Вкладка: Survey -->
+    <div id="surveyTab">
+      <h2>Create Survey</h2>
+      <input type="text" id="surveyTitle" placeholder="Survey Title" />
+      <div id="questionsContainer"></div>
+      <button onclick="UI.addQuestion()">Add Question</button>
+      <button onclick="UI.saveSurvey()">Save Survey</button>
+    </div>
+
+    <!-- Вкладка: Vote -->
+    <div id="voteTab" class="hidden">
+      <h2>Select Survey to Vote</h2>
+      <ul id="surveyList"></ul>
+      <div id="votingSection" class="hidden">
+        <h3 id="voteTitle"></h3>
+        <form id="votingForm"></form>
+        <button onclick="UI.submitVote()">Submit Vote</button>
+        <button onclick="UI.saveSurvey()">Save Survey</button>
+      </div>
+    </div>
+
+    <!-- Вкладка: Results -->
+    <div id="resultsTab" class="hidden">
+      <h2>Select Survey to View Results</h2>
+      <ul id="resultsList"></ul>
+      <div id="resultsSection"></div>
+    </div>
+
+    <!-- Вкладка: Theme -->
+    <!-- Вкладка: Theme -->
+    <div id="themeTab" class="hidden">
+      <div class="theme-selector">
+        <label for="themeSelect">Choose Theme:</label>
+        <select id="themeSelect" onchange="UI.changeTheme(this.value)">
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="solar">Solarized</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/storage.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/ui.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
