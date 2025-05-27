@@ -1,9 +1,8 @@
 const UI = {
   init() {
     this.switchTab('surveyTab');
-    const saved = localStorage.getItem('theme') || 'light';
-    this.changeTheme(saved);
-    document.getElementById('themeSelect').value = saved;
+    this.changeTheme('light'); // примусово встановлюємо білу тему
+    document.getElementById('themeSelect').value = 'light';
   },
 
   switchTab(tabId) {
@@ -156,13 +155,36 @@ const UI = {
     const res = await fetch('/api/polls');
     const polls = await res.json();
     const list = document.getElementById('resultsList');
+
+    // Очистити список
     list.innerHTML = '';
+
+    // Видалити стару кнопку, якщо є
+    const existingBtn = document.getElementById('delSelectedBtn');
+    if (existingBtn) existingBtn.remove();
+
+    // Додати нову кнопку
+    const delSelectedBtn = document.createElement('button');
+    delSelectedBtn.id = 'delSelectedBtn';
+    delSelectedBtn.textContent = "Видалити вибрані";
+    delSelectedBtn.onclick = () => UI.deleteSelectedPolls();
+    list.parentElement.insertBefore(delSelectedBtn, list);
 
     polls.forEach((poll, index) => {
       const li = document.createElement('li');
+
+      // Чекбокс
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.dataset.index = index;
+
+      // Кнопка перегляду
       const btn = document.createElement('button');
       btn.textContent = poll.title;
       btn.onclick = () => UI.showResults(index);
+
+      li.appendChild(checkbox);
+      li.appendChild(document.createTextNode(" "));
       li.appendChild(btn);
       list.appendChild(li);
     });
@@ -190,5 +212,22 @@ const UI = {
     themes.forEach(t => document.body.classList.remove(`${t}-theme`));
     document.body.classList.add(`${theme}-theme`);
     localStorage.setItem('theme', theme);
+  }, 
+  async deleteSelectedPolls() {
+    const checkboxes = document.querySelectorAll('#resultsList input[type="checkbox"]:checked');
+    if (checkboxes.length === 0) return alert("Нічого не вибрано");
+
+    if (!confirm(`Ви точно хочете видалити ${checkboxes.length} опитування?`)) return;
+
+    const indices = Array.from(checkboxes)
+      .map(cb => parseInt(cb.dataset.index))
+      .sort((a, b) => b - a); // видаляти з кінця
+
+    for (let index of indices) {
+      await fetch(`/api/polls/${index}`, { method: 'DELETE' });
+    }
+
+    alert("✅ Вибрані опитування видалено");
+    this.loadResultsTab();
   }
 };

@@ -58,6 +58,14 @@ def get_results(poll_id):
         return jsonify({'error': 'Invalid poll ID'}), 400
     return jsonify(polls[poll_id])
 
+@app.route('/api/polls/<int:poll_id>', methods=['DELETE'])
+def delete_poll(poll_id):
+    polls = load_polls()
+    if 0 <= poll_id < len(polls):
+        deleted = polls.pop(poll_id)
+        save_polls(polls)
+        return jsonify({'status': 'deleted', 'title': deleted['title']})
+    return jsonify({'error': 'Invalid poll ID'}), 400
 # ------------------- Main -------------------
 if __name__ == '__main__':
     app.run(debug=True)
