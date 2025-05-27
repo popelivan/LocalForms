@@ -159,6 +159,8 @@ const UI = {
     // Очистити список
     list.innerHTML = '';
 
+    document.getElementById('resultsSection').innerHTML = '';
+
     // Видалити стару кнопку, якщо є
     const existingBtn = document.getElementById('delSelectedBtn');
     if (existingBtn) existingBtn.remove();
@@ -168,7 +170,7 @@ const UI = {
     delSelectedBtn.id = 'delSelectedBtn';
     delSelectedBtn.textContent = "Видалити вибрані";
     delSelectedBtn.onclick = () => UI.deleteSelectedPolls();
-    list.parentElement.insertBefore(delSelectedBtn, list);
+    list.parentElement.appendChild(delSelectedBtn);
 
     polls.forEach((poll, index) => {
       const li = document.createElement('li');
