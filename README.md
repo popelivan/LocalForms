@@ -34,3 +34,9 @@ Built using HTML, CSS, JavaScript (frontend) and Flask (backend), LocalForms is 
 ## 👥 Team
 
 Ivan Popel — Full-stack Development, UI/UX, Testing
+
+## 🧪 Test Documentation
+
+- [Manual tests](./manual_tests.md)
+- [Automated tests](./automated_tests.md)
+- [Smoke test](./smoke_test.md)
